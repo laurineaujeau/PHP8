@@ -29,29 +29,29 @@
 <form action="modification.php" method="post">
     <div class="form-group">
         <label>ID de l'auteur</label>
-        <input type="number" class="form-control" name="auteurId">
+        <input  class="form-control" name="auteurId">
     </div>
     <div class="form-group">
         <label>Nom de l'auteur</label>
-        <input type="text" class="form-control" name="auteurNom">
+        <input class="form-control" name="auteurNom">
     </div>
     <div class="form-group">
         <label>Prénom de l'auteur</label>
-        <input type="text" class="form-control" name="auteurPrenom">
+        <input class="form-control" name="auteurPrenom">
     </div>
     <div class="form-group">
         <label>ID du siècle</label>
-        <input type="number" class="form-control" name="siecleId">
+        <input class="form-control" name="siecleId">
     </div>
     <div class="form-group">
         <label>siècle</label>
-        <input type="number" class="form-control" name="siecle">
+        <input class="form-control" name="siecle">
     </div>
     <div class="form-group">
         <label>Citation</label>
-        <input type="text" class="form-control" name="citation">
+        <input class="form-control" name="citation">
     </div>
-    <button type="submit" class="btn btn-dark">Ajouter</button>
+    <button class="btn btn-dark">Ajouter</button>
     <br><br>
     <?php
     include "connexpdo.php";
@@ -85,8 +85,8 @@
         if($result){
             echo "result";
         }
-       // $result->execute([$compteur,$citation,$auteurid,$siecleid]);
-        $result->execute(array($compteur,$_POST['citation'],$_POST['auteurId'],$_POST['siecleId']));
+        $result->execute([$compteur,$citation,$auteurid,$siecleid]);
+        //$result->execute(array($compteur,$_POST['citation'],$_POST['auteurId'],$_POST['siecleId']));
         //var_dump($result);
 
        /* $query5 = "INSERT INTO citation (id,phrase,auteurid,siecleid) VALUES ($compteur,$citation,$auteurid,$siecleid)";
@@ -113,9 +113,9 @@
     <h1>Suppression</h1>
     <select class="custom-select">
         <option selected>-- Sélectionner l'ID d'une citation --</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        <option>One</option>
+        <option>Two</option>
+        <option>Three</option>
     </select>
     <br><br>
     <button type="submit" class="btn btn-dark">Supprimer</button>

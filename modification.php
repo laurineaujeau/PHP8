@@ -54,74 +54,86 @@
     <button class="btn btn-dark">Ajouter</button>
     <br><br>
     <?php
-    include "connexpdo.php";
+    error_reporting(E_ALL & ~E_NOTICE);
 
+    include "connexpdo.php";
     $base='pgsql:dbname=citations;host=127.0.0.1;port=5432';
     $user = 'postgres';
     $password = 'isen2018';
-
     $idcon = connexpdo($base,$user,$password);
-
     if (isset($_POST['auteurId']) && isset($_POST['siecle']) && isset($_POST['auteurNom']) && isset($_POST['auteurPrenom'])  && isset($_POST['siecleId'])  && isset($_POST['citation'])){
         $query4 = "SELECT * from citation";
         $result4 = $idcon->query($query4);
         $compteur =0;
         foreach($result4 as $data){
-            $compteur = $compteur +1;
+            if($data["id"] > $compteur){
+                $compteur = $data["id"];
+            }
         }
         $compteur = $compteur +1;
-        //echo $compteur;
         $citation = $_POST['citation'];
-        //echo $citation;
-        //var_dump($_POST['citation']);
         $auteurid = $_POST['auteurId'];
-        //echo $auteurid;
-        //var_dump($_POST['auteurId']);
         $siecleid = $_POST['siecleId'];
-        //echo $siecle;
-        //var_dump($_POST['siecleId']);
         $query="INSERT INTO citation (id,phrase,auteurid,siecleid) VALUES(?,?,?,?)";
         $result = $idcon->prepare($query);
-        if($result){
-            echo "result";
-        }
         $result->execute([$compteur,$citation,$auteurid,$siecleid]);
-        //$result->execute(array($compteur,$_POST['citation'],$_POST['auteurId'],$_POST['siecleId']));
-        //var_dump($result);
 
-       /* $query5 = "INSERT INTO citation (id,phrase,auteurid,siecleid) VALUES ($compteur,$citation,$auteurid,$siecleid)";
-        if ($idcon->query($query5)) {
-            echo "New record created successfully";
-        } else {
-            var_dump($query5);
-            echo "Error: " . $query5 . "<br>" . $idcon->error;
-        }*/
-        /*$query5 = "INSERT INTO citation(id,phrase,auteurid,siecleid) VALUES($compteur,$citation,$auteurid,$siecle)";
-        $idcon->prepare($query5);
-        $idcon->execute();*/
-       /* $idcon->prepare("INSERT INTO citation(id,phrase,auteurid,siecleid) VALUES(?,?,?,?)");
-        $idcon->execute(array($compteur,$_POST['citation'],$_POST['auteurId'],$_POST['siecleId']));*/
-        echo "citation ";
-       /* $idcon->prepare("INSERT INTO auteur(id,nom,prenom) VALUES(?,?,?)");
-        $idcon->execute(array($_POST['auteurId'],$_POST['auteurNom'],$_POST['auteurPrenom']));
-        echo "auteur";
-        $idcon->prepare("INSERT INTO siecle(id,numero) VALUES(?,?)");
-        $idcon->execute(array($_POST['siecleId'],$_POST['siecle']));
-        echo "siecle";*/
+
+        $query1 = "SELECT * from auteur";
+        $result1 = $idcon->query($query1);
+        $auteurValid = true;
+        foreach($result1 as $data){
+            if($data['id']== $auteurid){
+                $auteurValid = false;
+            }
+        }
+        if($auteurValid){
+            $nom =$_POST['auteurNom'];
+            $prenom=$_POST['auteurPrenom'];
+            $query2="INSERT INTO auteur (id,nom,prenom) VALUES(?,?,?)";
+            $result2 = $idcon->prepare($query2);
+            $result2->execute([$auteurid,$nom,$prenom]);
+        }
+
+
+        $query3 = "SELECT * from siecle";
+        $result3 = $idcon->query($query3);
+        $siecleValid = true;
+        foreach($result3 as $data){
+            if($data['id']== $siecleid){
+                $siecleValid = false;
+            }
+        }
+        if($siecleValid){
+            $numero =$_POST['siecle'];
+            $query6="INSERT INTO siecle (id,numero) VALUES(?,?)";
+            $result6 = $idcon->prepare($query6);
+            $result6->execute([$siecleid,$numero]);
+        }
+
+
+
     }
-    ?>
-    <h1>Suppression</h1>
-    <select class="custom-select">
-        <option selected>-- Sélectionner l'ID d'une citation --</option>
-        <option>One</option>
-        <option>Two</option>
-        <option>Three</option>
-    </select>
+
+$query9= "SELECT * from citation";
+$result9 = $idcon->query($query9);
+echo ' <h1>Suppression</h1>';
+echo '<select class="custom-select" name="citationSuppr">';
+echo '<option >-- ID citation --</option>';
+foreach($result9 as $data2){
+    echo '<option >'.$data2['id'].'</option>';
+
+}
+echo '</select>';
+if(isset($_POST['citationSuppr'])){
+    $query1 = "DELETE from citation WHERE id=?";
+    $result1 = $idcon->prepare($query1);
+    $result1->execute([$_POST['citationSuppr']]);
+}
+
+?>
     <br><br>
     <button type="submit" class="btn btn-dark">Supprimer</button>
 </form>
-<?php
-
-?>
 </body>
 </html>

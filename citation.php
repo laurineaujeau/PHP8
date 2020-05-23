@@ -38,9 +38,7 @@ echo '<h1>La citation du jour</h1><hr>';
 $query4 = "SELECT * from citation";
 $result4 = $idcon->query($query4);
 $compteur =0;
-/*if ($result4){
-    echo $compteur;
-}*/
+
 foreach($result4 as $data){
     $compteur = $compteur +1;
 }
@@ -49,11 +47,11 @@ echo '<br>';
 echo 'Et en voici une générée aléatoirement :';
 echo '<br>';
 $alea = rand (1,$compteur);
-//echo $alea;
+
 /*if ($result4 ){
     //echo $result4; ne fonctionne pas
     //echo $result4->fetch() ; fontionne mais n'affiche rien
-    echo $alea;
+
 }*/
 $query5 = "SELECT * from citation";
 $result5 = $idcon->query($query5);
@@ -65,11 +63,7 @@ foreach($result5 as $data){
         $query6 = "SELECT * from auteur";
         $result6 = $idcon->query($query6);
         foreach($result6 as $data2){
-            //echo "tu es dans la boucle 2";
-            //echo '<br>';
             if($data['auteurid'] == $data2['id']){
-                //echo "tu es dans le if";
-                //echo '<br>';
                 echo $data2['prenom']." ".$data2['nom']." ";
 
             }
@@ -78,26 +72,13 @@ foreach($result5 as $data){
         $query7 = "SELECT * from siecle";
         $result7 = $idcon->query($query7);
         foreach($result7 as $data2) {
-            //echo "tu es dans la boucle 2";
-            //echo '<br>';
             if ($data['siecleid'] == $data2['id']) {
-                //echo "tu es dans le if";
-                //echo '<br>';
                 echo "(" . $data2['numero'] . " ème siècle)";
 
             }
         }
     }
 }
-/*while($data = $result4->fetch()){
-    echo $data['id'];
-    echo $alea;
-    if($alea == $data['id']){
-        echo '<strong>';
-        echo $data['phrase'];
-        echo '</strong><br>';
-    }
-}*/
 
 ?>
 </body>
